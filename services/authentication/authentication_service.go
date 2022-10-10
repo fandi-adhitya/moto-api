@@ -5,6 +5,6 @@ import (
 )
 
 type AuthenticationService interface {
-	SignIn(request web.AuthRequest) (web.AuthResponse, error)
-	SignUp(request web.AuthRequest) (web.AuthResponse, error)
+	SignIn(request web.AuthRequest) web.AuthResponse
+	SignUp(request web.AuthRequest) web.AuthResponse
 }

@@ -1,6 +1,7 @@
 package authentication
 
 import (
+	"github.com/fandi-adhitya/moto-api.git/helpers"
 	"github.com/fandi-adhitya/moto-api.git/models/web"
 	"github.com/fandi-adhitya/moto-api.git/services/authentication"
 	"github.com/gin-gonic/gin"
@@ -18,24 +19,9 @@ func NewAuthenticationControllerImpl(authenticationService authentication.Authen
 func (controller *AuthenticationControllerImpl) SignIn(c *gin.Context) {
 	payload := web.AuthRequest{}
 
-	if err := c.ShouldBindJSON(&payload); err != nil {
-		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{
-			"error":   "validation error",
-			"message": err.Error(),
-		})
-		return
-	}
+	helpers.ValidationJson(c, &payload)
 
-	auth, err := controller.AuthenticationService.SignIn(payload)
-
-	if err != nil {
-		c.JSON(http.StatusNotFound, gin.H{
-			"code":   http.StatusNotFound,
-			"status": http.StatusText(http.StatusNotFound),
-			"data":   err.Error(),
-		})
-		return
-	}
+	auth := controller.AuthenticationService.SignIn(payload)
 
 	c.JSON(http.StatusOK, gin.H{
 		"code":   http.StatusOK,
@@ -43,9 +29,22 @@ func (controller *AuthenticationControllerImpl) SignIn(c *gin.Context) {
 		"data":   auth,
 	})
 
+	return
+
 }
 
 func (controller *AuthenticationControllerImpl) SignUp(c *gin.Context) {
-	//TODO implement me
-	panic("implement me")
+	payload := web.AuthRequest{}
+
+	helpers.ValidationJson(c, &payload)
+
+	user := controller.AuthenticationService.SignUp(payload)
+
+	c.JSON(http.StatusOK, gin.H{
+		"code":   http.StatusOK,
+		"status": http.StatusText(http.StatusOK),
+		"data":   user,
+	})
+
+	return
 }

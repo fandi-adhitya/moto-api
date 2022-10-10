@@ -17,10 +17,10 @@ func NewRouter(db *gorm.DB, validate *validator.Validate) {
 	authenticationService := service.NewAuthenticationServiceImpl(authenticationRepository, db, validate)
 	authenticationController := controller.NewAuthenticationControllerImpl(authenticationService)
 
-	router.Use(gin.Recovery())
-	router.Use(exceptions.ErrorHandler())
+	router.Use(gin.CustomRecovery(exceptions.ErrorHandler))
 
 	router.POST("/sign-in", authenticationController.SignIn)
+	router.POST("/sign-up", authenticationController.SignUp)
 
 	router.Run()
 }

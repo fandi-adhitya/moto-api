@@ -15,13 +15,23 @@ func NewAuthenticationRepositoryImpl() *AuthenticationRepositoryImpl {
 
 func (auth *AuthenticationRepositoryImpl) SignIn(tx *gorm.DB, user models.User) (models.User, error) {
 	find := tx.First(&user, "email = ? ", user.Email)
+
 	if find.Error != nil {
 		return user, errors.New("Cannot find user")
 	}
+
 	return user, nil
 
 }
 
 func (auth *AuthenticationRepositoryImpl) SignUp(tx *gorm.DB, user models.User) (models.User, error) {
-	panic("any")
+	find := tx.First(&user, "email = ? ", user.Email)
+
+	if find.Error == nil {
+		return user, errors.New("Email already exist")
+	}
+
+	tx.Create(&user)
+
+	return user, nil
 }

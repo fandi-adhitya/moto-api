@@ -1,6 +1,6 @@
 package web
 
 type AuthRequest struct {
-	Email    string `binding:"required,email" json:"email"`
-	Password string `binding:"required,lte=6" json:"password"`
+	Email    string `validate:"required,email" json:"email"`
+	Password string `validate:"required,gte=6" json:"password"`
 }
