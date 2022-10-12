@@ -7,4 +7,5 @@ import (
 type AuthenticationService interface {
 	SignIn(request web.AuthRequest) web.AuthResponse
 	SignUp(request web.AuthRequest) web.AuthResponse
+	GenerateToken(user web.AuthResponse) (string, error)
 }

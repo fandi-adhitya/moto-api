@@ -7,11 +7,10 @@ import (
 )
 
 func main() {
-
 	db := application.NewDB()
 	validate := validator.New()
-	application.SyncDB()
 
+	application.SyncDB()
 	application.NewRouter(db, validate)
 
 }

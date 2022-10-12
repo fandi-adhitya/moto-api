@@ -21,6 +21,7 @@ func NewRouter(db *gorm.DB, validate *validator.Validate) {
 
 	router.POST("/sign-in", authenticationController.SignIn)
 	router.POST("/sign-up", authenticationController.SignUp)
+	router.GET("/verify", AuthMiddleware, authenticationController.Validate)
 
 	router.Run()
 }

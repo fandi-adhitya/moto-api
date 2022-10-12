@@ -7,8 +7,11 @@ import (
 	"github.com/fandi-adhitya/moto-api.git/models/web"
 	"github.com/fandi-adhitya/moto-api.git/repositories/authentication"
 	"github.com/go-playground/validator/v10"
+	"github.com/golang-jwt/jwt/v4"
 	"golang.org/x/crypto/bcrypt"
 	"gorm.io/gorm"
+	"os"
+	"time"
 )
 
 type AuthenticationServiceImpl struct {
@@ -76,4 +79,20 @@ func (service *AuthenticationServiceImpl) SignUp(request web.AuthRequest) web.Au
 		CreatedAt: response.CreatedAt,
 		UpdatedAt: response.UpdatedAt,
 	}
+}
+
+func (service *AuthenticationServiceImpl) GenerateToken(user web.AuthResponse) (string, error) {
+	generateToken := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
+		"sub": user.Id,
+		"exp": time.Now().Add(time.Hour * 24 * 30).Unix(),
+	})
+
+	signedString, err := generateToken.SignedString([]byte(os.Getenv("SECRET")))
+
+	if err != nil {
+		return "", err
+	}
+
+	return signedString, nil
+
 }
